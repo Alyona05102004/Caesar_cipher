@@ -9,6 +9,7 @@
 #include "Unit1.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "cspin"
 #pragma resource "*.dfm"
 using namespace std;
 TForm1 *Form1;
@@ -27,7 +28,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button3Click(TObject *Sender)
-{
+{   //очистить
 	key="";
 	s="";
 	k=0;
@@ -35,7 +36,7 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
 	LabeledEdit1->Text="";
 	LabeledEdit2->Text="";
 	LabeledEdit3->Text="";
-	LabeledEdit4->Text="";
+    CSpinEdit1->Value=0;
 }
 
 //---------------------------------------------------------------------------
@@ -43,7 +44,7 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 { 	// Зашифровать
     new_s="";
 	key=LabeledEdit2->Text;
-	k=StrToInt(LabeledEdit3->Text);
+	k=CSpinEdit1->Value;
 	s=LabeledEdit1->Text;
 
 	new_alphabet= Generate_new_alphabet(key, k);
@@ -52,7 +53,7 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 		char c = s[i];
 		new_s += new_alphabet[alphabet.Pos(c)];
     }
-	LabeledEdit4->Text = new_s;
+	LabeledEdit3->Text = new_s;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -60,7 +61,7 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 	//расшифровать
     new_s="";
 	key=LabeledEdit2->Text;
-	k=StrToInt(LabeledEdit3->Text);
+	k=CSpinEdit1->Value;
 	s=LabeledEdit1->Text;
 
 	new_alphabet= Generate_new_alphabet(key, k);
@@ -70,7 +71,7 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 		char c = s[i];
 		new_s += alphabet[new_alphabet.Pos(c)];
 	}
-	LabeledEdit4->Text = new_s; // Выводим расшифрованный текст
+	LabeledEdit3->Text = new_s; // Выводим расшифрованный текст
 }
 //---------------------------------------------------------------------------
 
@@ -93,10 +94,12 @@ AnsiString TForm1::Generate_new_alphabet (const AnsiString key, int k){
         }
     }
 
-    k=k%newAlphabet.Length();
+	k=k%newAlphabet.Length();
 	newAlphabet = newAlphabet.SubString(newAlphabet.Length()-k+1, newAlphabet.Length()) + newAlphabet.SubString(1, newAlphabet.Length()-k);
 	ShowMessage("Конечный новый алфавит: "+newAlphabet) ;
 
 	return newAlphabet;
 }
+
+
 

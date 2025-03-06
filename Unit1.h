@@ -9,6 +9,7 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Mask.hpp>
+#include "cspin.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -17,11 +18,12 @@ __published:	// IDE-managed Components
 	TButton *Button1;
 	TButton *Button2;
 	TGroupBox *GroupBox1;
-	TLabeledEdit *LabeledEdit4;
-	TButton *Button3;
 	TLabeledEdit *LabeledEdit3;
+	TButton *Button3;
 	TLabeledEdit *LabeledEdit2;
 	TLabel *Label1;
+	TCSpinEdit *CSpinEdit1;
+	TLabel *Label2;
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
