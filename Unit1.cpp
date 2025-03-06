@@ -26,130 +26,77 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 {
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::LabeledEdit1Change(TObject *Sender)
-{
-s=LabeledEdit1->Text;
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::LabeledEdit3Change(TObject *Sender)
-{
- s=LabeledEdit3->Text;
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TForm1::Button3Click(TObject *Sender)
 {
 	key="";
 	s="";
+	k=0;
 	new_s="";
 	LabeledEdit1->Text="";
 	LabeledEdit2->Text="";
-	LabeledEdit5->Text="";
-    LabeledEdit7->Text="";
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button4Click(TObject *Sender)
-{   key="";
-	s="";
-	new_s="";
 	LabeledEdit3->Text="";
 	LabeledEdit4->Text="";
-	LabeledEdit6->Text="";
-	LabeledEdit8->Text="";
 }
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 { 	// Зашифровать
-	new_s = "";
-	new_alphabet = "";
-	AnsiString used="";
-	for (size_t j = 1; j <= key.Length(); j++) {
-		char d = key[j];
-		if (used.Pos(d) == 0) {
-			new_alphabet += d;
-			used += d;
-        }
-    }
+    new_s="";
+	key=LabeledEdit2->Text;
+	k=StrToInt(LabeledEdit3->Text);
+	s=LabeledEdit1->Text;
 
-    for (size_t i = 1; i <= alphabet.Length(); i++) {
-        char c = alphabet[i];
-		if (used.Pos(c) == 0) {
-			new_alphabet += c;
-			used += c;
-        }
-    }
-	//ShowMessage("Новый алфавит с вcтавленным ключевым словом: "+new_alphabet);
-
-    k=k%new_alphabet.Length();
-	new_alphabet = new_alphabet.SubString(new_alphabet.Length()-k+1, new_alphabet.Length()) + new_alphabet.SubString(1, new_alphabet.Length()-k);
-	ShowMessage("Конечный новый алфавит: "+new_alphabet) ;
-
-
+	new_alphabet= Generate_new_alphabet(key, k);
 	// Шифруем текст
     for (size_t i = 1; i <= s.Length(); i++) {
 		char c = s[i];
 		new_s += new_alphabet[alphabet.Pos(c)];
     }
-	LabeledEdit5->Text = new_s;
+	LabeledEdit4->Text = new_s;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
 {
-//расшифровать
-	new_s = "";
-	new_alphabet = "";
-	AnsiString used="";
-	for (size_t j = 1; j <= key.Length(); j++) {
-		char d = key[j];
-		if (used.Pos(d) == 0) {
-			new_alphabet += d;
-			used += d;
-        }
-    }
+	//расшифровать
+    new_s="";
+	key=LabeledEdit2->Text;
+	k=StrToInt(LabeledEdit3->Text);
+	s=LabeledEdit1->Text;
 
-    for (size_t i = 1; i <= alphabet.Length(); i++) {
-        char c = alphabet[i];
-		if (used.Pos(c) == 0) {
-			new_alphabet += c;
-			used += c;
-        }
-    }
-	//ShowMessage("Новый алфавит с вcтавленным ключевым словом: "+new_alphabet);
-
-    k=k%new_alphabet.Length();
-	new_alphabet = new_alphabet.SubString(new_alphabet.Length()-k+1, new_alphabet.Length()) + new_alphabet.SubString(1, new_alphabet.Length()-k);
-	//ShowMessage("Конечный новый алфавит: "+new_alphabet) ;
-
+	new_alphabet= Generate_new_alphabet(key, k);
 
 	// Расшифровываем текст
     for (size_t i = 1; i <= s.Length(); i++) {
 		char c = s[i];
 		new_s += alphabet[new_alphabet.Pos(c)];
 	}
-  LabeledEdit6->Text = new_s; // Выводим расшифрованный текст
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::LabeledEdit2Change(TObject *Sender)
-{
-key=LabeledEdit2->Text;
+	LabeledEdit4->Text = new_s; // Выводим расшифрованный текст
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::LabeledEdit4Change(TObject *Sender)
-{
- key=LabeledEdit4->Text;
-}
-//---------------------------------------------------------------------------
+AnsiString TForm1::Generate_new_alphabet (const AnsiString key, int k){
+	AnsiString newAlphabet = "";
+	AnsiString used="";
+	for (size_t j = 1; j <= key.Length(); j++) {
+		char d = key[j];
+		if (used.Pos(d) == 0) {
+			newAlphabet += d;
+			used += d;
+        }
+    }
 
-void __fastcall TForm1::LabeledEdit7Change(TObject *Sender)
-{
-	k=StrToInt(LabeledEdit7->Text);
-}
-//---------------------------------------------------------------------------
+	for (size_t i = 1; i <= alphabet.Length(); i++) {
+        char c = alphabet[i];
+		if (used.Pos(c) == 0) {
+			newAlphabet += c;
+			used += c;
+        }
+    }
 
-void __fastcall TForm1::LabeledEdit8Change(TObject *Sender)
-{
-	k=StrToInt(LabeledEdit8->Text);
+    k=k%newAlphabet.Length();
+	newAlphabet = newAlphabet.SubString(newAlphabet.Length()-k+1, newAlphabet.Length()) + newAlphabet.SubString(1, newAlphabet.Length()-k);
+	ShowMessage("Конечный новый алфавит: "+newAlphabet) ;
+
+	return newAlphabet;
 }
-//---------------------------------------------------------------------------
 

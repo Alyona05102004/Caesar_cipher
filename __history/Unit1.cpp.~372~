@@ -1,0 +1,100 @@
+//---------------------------------------------------------------------------
+#include <vcl.h>
+#include <string>
+#include <string.h>
+#include <iostream>
+
+#pragma hdrstop
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+using namespace std;
+TForm1 *Form1;
+
+AnsiString s;
+AnsiString new_s;
+AnsiString key;
+int k=0;
+
+AnsiString new_alphabet;
+AnsiString alphabet="абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+	key="";
+	s="";
+	k=0;
+	new_s="";
+	LabeledEdit1->Text="";
+	LabeledEdit2->Text="";
+	LabeledEdit3->Text="";
+	LabeledEdit4->Text="";
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{ 	// Зашифровать
+	key=LabeledEdit2->Text;
+	k=StrToInt(LabeledEdit3->Text);
+	s=LabeledEdit1->Text;
+
+	new_alphabet= Generate_new_alphabet(key, k);
+	// Шифруем текст
+    for (size_t i = 1; i <= s.Length(); i++) {
+		char c = s[i];
+		new_s += new_alphabet[alphabet.Pos(c)];
+    }
+	LabeledEdit4->Text = new_s;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+	//расшифровать
+	key=LabeledEdit2->Text;
+	k=StrToInt(LabeledEdit3->Text);
+	s=LabeledEdit1->Text;
+
+	new_alphabet= Generate_new_alphabet(key, k);
+
+	// Расшифровываем текст
+    for (size_t i = 1; i <= s.Length(); i++) {
+		char c = s[i];
+		new_s += alphabet[new_alphabet.Pos(c)];
+	}
+  LabeledEdit4->Text = new_s; // Выводим расшифрованный текст
+}
+//---------------------------------------------------------------------------
+
+AnsiString TForm1::Generate_new_alphabet (const AnsiString key, int k){
+    AnsiString newAlphabet = "";
+	AnsiString used="";
+	for (size_t j = 1; j <= key.Length(); j++) {
+		char d = key[j];
+		if (used.Pos(d) == 0) {
+			newAlphabet += d;
+			used += d;
+        }
+    }
+
+    for (size_t i = 1; i <= 33; i++) {
+        char c = alphabet[i];
+		if (used.Pos(c) == 0) {
+			newAlphabet += c;
+			used += c;
+        }
+    }
+
+    k=k%new_alphabet.Length();
+	newAlphabet = newAlphabet.SubString(newAlphabet.Length()-k+1, newAlphabet.Length()) + newAlphabet.SubString(1, newAlphabet.Length()-k);
+	ShowMessage("Конечный новый алфавит: "+newAlphabet) ;
+
+	return newAlphabet;
+}
+
